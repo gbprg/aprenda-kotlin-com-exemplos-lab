@@ -1,21 +1,53 @@
-// [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
+class Formacao(
+    val nome: String,
+    val nivel: String,
+    val conteudosEducacionais: List<ConteudoEducacional>
+) {
+    private val matriculas: MutableList<Matricula> = mutableListOf()
 
-enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+    fun matricularAluno(aluno: Aluno) {
+        val matricula = Matricula(aluno, this)
+        matriculas.add(matricula)
+    }
 
-class Usuario
+    fun listarMatriculas(): List<Matricula> {
+        return matriculas.toList()
+    }
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
-
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
-
-    val inscritos = mutableListOf<Usuario>()
-    
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun listarAlunosMatriculados(): List<Aluno> {
+        return matriculas.map { it.aluno }
     }
 }
 
+class Aluno(val nome: String)
+
+class ConteudoEducacional(val nome: String)
+
+class Matricula(val aluno: Aluno, val formacao: Formacao)
+
 fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+    val conteudo1 = ConteudoEducacional("Introdução ao Kotlin")
+    val conteudo2 = ConteudoEducacional("Programação Orientada a Objetos em Kotlin")
+    
+    val formacao = Formacao("Formação de Desenvolvimento em Kotlin", "Avançado", listOf(conteudo1, conteudo2))
+    
+    val aluno1 = Aluno("Zé da manga")
+    val aluno2 = Aluno("Sergin Cambalhota")
+    
+    formacao.matricularAluno(aluno1)
+    formacao.matricularAluno(aluno2)
+    
+    println("Informações da Formação:")
+    println("Nome: ${formacao.nome}")
+    println("Nível: ${formacao.nivel}")
+    
+    println("Conteúdos Educacionais:")
+    formacao.conteudosEducacionais.forEach { conteudo ->
+        println("- ${conteudo.nome}")
+    }
+    
+    println("Alunos matriculados na formação ${formacao.nome}:")
+    formacao.listarAlunosMatriculados().forEachIndexed { index, aluno ->
+        println("${index + 1}. Aluno: ${aluno.nome}")
+    }
 }
